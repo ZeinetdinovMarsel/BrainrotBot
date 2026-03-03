@@ -1,6 +1,5 @@
 import random
 import json
-import asyncio
 from telegram import Update
 from telegram.ext import (
     ApplicationBuilder,
@@ -35,6 +34,7 @@ special_words = ["7у7","8471"]
 def generate_word():
     if random.random() < 0.01:
         return random.choice(special_words)
+
     prefix = random.choice(prefixes)
     consonant = random.choice(consonants)
     vowel = random.choice(vowels)
@@ -42,20 +42,20 @@ def generate_word():
     return prefix + consonant + vowel + ending
 
 
-async def send_random_words_loop(app):
-    await app.initialize()
-    await app.start()
-    bot = app.bot
-    while True:
-        if CHAT_IDS:
-            word = generate_word()
-            for chat_id in CHAT_IDS:
-                try:
-                    await bot.send_message(chat_id=chat_id, text=word)
-                except Exception as e:
-                    print(f"Ошибка при отправке в чат {chat_id}: {e}")
-        await asyncio.sleep(5)
-
+async def send_random_word(context: ContextTypes.DEFAULT_TYPE):
+    if not CHAT_IDS:
+        return
+    word = generate_word()
+    for chat_id in CHAT_IDS:
+        text = word
+        try:
+            await context.bot.send_message(
+                chat_id=chat_id,
+                text=text,
+                parse_mode="MarkdownV2"
+            )
+        except Exception as e:
+            print(f"Ошибка при отправке в чат {chat_id}: {e}")
 
 async def chat_member_update(update: Update, context: ContextTypes.DEFAULT_TYPE):
     status = update.my_chat_member.new_chat_member.status
@@ -64,24 +64,30 @@ async def chat_member_update(update: Update, context: ContextTypes.DEFAULT_TYPE)
         if chat.id not in CHAT_IDS:
             CHAT_IDS.append(chat.id)
             save_chats()
-            print(f"Добавлен новый чат: {chat.title if chat.title else chat.id}")
-
+            print(f"Добавлен новый чат: {chat.title if chat.title else chat.id}, chat_id сохранён.")
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Бот запущен")
 
 
-async def main():
-    app = ApplicationBuilder().token(TOKEN).build()
+def main():
+    app = (
+        ApplicationBuilder()
+        .token(TOKEN)
+        .proxy(None)
+        .connect_timeout(30)
+        .read_timeout(30)
+        .build()
+    )
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(ChatMemberHandler(chat_member_update, chat_member_types=["my_chat_member"]))
-
-    asyncio.create_task(send_random_words_loop(app))
+    app.job_queue.run_repeating(send_random_word, interval=5, first=5)
 
     print("Бот запущен...")
-    await app.run_polling()
+    app.run_polling()
+
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
