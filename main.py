@@ -96,7 +96,7 @@ def main():
 
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, register_by_word))
     app.add_handler(ChatMemberHandler(chat_member_update, chat_member_types=["my_chat_member"]))
-    app.job_queue.run_repeating(send_random_word, interval=5, first=5)
+    app.job_queue.run_repeating(send_random_word, interval=1800, first=5)
 
     print("Бот запущен...")
     app.run_polling()
