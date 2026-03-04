@@ -75,9 +75,9 @@ async def register_by_word(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     text = update.message.text.lower()
-    triggers = ["тить", "тит", "титька"]
+    tit_triggers = ["тить", "тит", "титька","tit"]
 
-    if any(word in text for word in triggers):
+    if any(word in text for word in tit_triggers):
         chat = update.effective_chat
 
         if chat.id not in CHAT_IDS:
@@ -90,6 +90,18 @@ async def register_by_word(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_animation(
             animation=gif_url
         )
+
+    nikita_triggers = ["никита", "некит", "никитос", "@Xonalz", "никитка","засранец","xonalz","xonal","nikita","никитыч","никиту","никит","никите","никиты"]
+
+    if any(word in text for word in nikita_triggers):
+        gif_url = "https://media1.tenor.com/m/Ah9iWbZYiVwAAAAC/капибара-zelko.gif"
+
+        await update.message.reply_animation(
+            animation=gif_url,
+            reply_to_message_id=update.message.message_id
+        )
+
+
 
 def main():
     app = (
