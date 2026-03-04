@@ -75,9 +75,9 @@ async def register_by_word(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     text = update.message.text.lower()
-    trigger_word = "тить"
+    triggers = ["тить", "тит", "титька"]
 
-    if trigger_word in text:
+    if any(word in text for word in triggers):
         chat = update.effective_chat
 
         if chat.id not in CHAT_IDS:
