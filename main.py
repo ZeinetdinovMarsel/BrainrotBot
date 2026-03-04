@@ -5,7 +5,7 @@ from telegram.ext import (
     ApplicationBuilder,
     CommandHandler,
     ContextTypes,
-    ChatMemberHandler,
+    ChatMemberHandler, MessageHandler, filters
 )
 
 TOKEN = "8414039519:AAG3nIb4SPVX9SbqAHodOkL5GEtV9jhJoLM"
@@ -69,6 +69,20 @@ async def chat_member_update(update: Update, context: ContextTypes.DEFAULT_TYPE)
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Бот запущен")
 
+async def register_by_word(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not update.message:
+        return
+
+    text = update.message.text.lower()
+    trigger_word = "тить"
+
+    if trigger_word in text:
+        chat = update.effective_chat
+
+        if chat.id not in CHAT_IDS:
+            CHAT_IDS.append(chat.id)
+            save_chats()
+            print(f"Зарегистрирован чат по слову: {chat.id}")
 
 def main():
     app = (
@@ -80,7 +94,7 @@ def main():
         .build()
     )
 
-    app.add_handler(CommandHandler("start", start))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, register_by_word))
     app.add_handler(ChatMemberHandler(chat_member_update, chat_member_types=["my_chat_member"]))
     app.job_queue.run_repeating(send_random_word, interval=5, first=5)
 
