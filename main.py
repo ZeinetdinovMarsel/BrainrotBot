@@ -91,13 +91,13 @@ async def register_by_word(update: Update, context: ContextTypes.DEFAULT_TYPE):
             animation=gif_url
         )
 
-    nikita_triggers = ["никита", "некит", "никитос", "@Xonalz", "никитка","засранец","xonalz","xonal","nikita","никитыч","никиту","никит","никите","никиты"]
+    nikita_triggers = ["никит", "некит","засран","xonal","nikit"]
 
     if any(word in text for word in nikita_triggers):
-        gif_url = "https://media1.tenor.com/m/Ah9iWbZYiVwAAAAC/капибара-zelko.gif"
-
-        await update.message.reply_animation(
-            animation=gif_url,
+        await context.bot.send_animation(
+            chat_id=update.effective_chat.id,
+            animation="https://media1.tenor.com/m/Ah9iWbZYiVwAAAAC/капибара-zelko.gif",
+            caption="@Xonalz",
             reply_to_message_id=update.message.message_id
         )
 
