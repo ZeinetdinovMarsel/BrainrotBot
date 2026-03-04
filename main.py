@@ -69,6 +69,7 @@ async def chat_member_update(update: Update, context: ContextTypes.DEFAULT_TYPE)
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Бот запущен")
 
+
 async def register_by_word(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message:
         return
@@ -83,6 +84,13 @@ async def register_by_word(update: Update, context: ContextTypes.DEFAULT_TYPE):
             CHAT_IDS.append(chat.id)
             save_chats()
             print(f"Зарегистрирован чат по слову: {chat.id}")
+
+        await update.message.reply_text("Не зови меня тить")
+        gif_url = "https://tenor.com/ru/view/dont-call-me-a-tit-youre-a-tit-tit-bluetit-hey-gif-21804746"
+
+        await update.message.reply_animation(
+            animation=gif_url
+        )
 
 def main():
     app = (
