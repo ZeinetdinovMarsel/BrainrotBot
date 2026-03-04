@@ -85,7 +85,6 @@ async def register_by_word(update: Update, context: ContextTypes.DEFAULT_TYPE):
             save_chats()
             print(f"Зарегистрирован чат по слову: {chat.id}")
 
-        await update.message.reply_text("Не зови меня тить")
         gif_url = "https://media1.tenor.com/m/_6i1M6jDbNkAAAAd/dont-call-me-a-tit-youre-a-tit.gif"
 
         await update.message.reply_animation(
