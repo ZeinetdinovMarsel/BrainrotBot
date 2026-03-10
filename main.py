@@ -8,7 +8,7 @@ from telegram.ext import (
     ApplicationBuilder, ContextTypes, ChatMemberHandler, MessageHandler, filters
 )
 
-TOKEN = "8634728112:AAGpFGSiXQLzyTQnLRfgeXtwGPtjgABaBD4"
+TOKEN = "8634728112:AAG6Jxo3B0Cfc2AopPw3etPY8E29R7KDdC8"
 GIGA_CREDENTIALS = "MDE5Y2Q4YWItZWE4NC03ODQ1LTliOTctZmIzMjU2ZjIyZWI4OmUxM2MxMzkxLWZhZjMtNDJmOC04ODhiLTdjYzRkOGYzMDc3NA=="
 FILE = "chats.json"
 
